@@ -1,0 +1,81 @@
+{
+  "entities": {
+    "profiles": {
+      "title": "Perfis de Usuário",
+      "description": "Armazena informações de médicos e atendentes.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid", "description": "ID único do usuário" },
+        "name": { "type": "string", "description": "Nome completo" },
+        "email": { "type": "string", "format": "email", "description": "E-mail institucional" },
+        "role": { "type": "string", "enum": ["doctor", "attendant"], "description": "Perfil de acesso" },
+        "specialty_id": { "type": "string", "format": "uuid", "description": "ID da especialidade (apenas para médicos)" },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "email", "role"]
+    },
+    "doctors": {
+      "title": "Médicos",
+      "description": "Tabela dedicada para informações dos médicos.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid", "description": "ID único do médico" },
+        "name": { "type": "string", "description": "Nome completo" },
+        "email": { "type": "string", "format": "email", "description": "E-mail profissional" },
+        "crm": { "type": "string", "description": "Registro CRM" },
+        "phone": { "type": "string", "description": "Telefone de contato" },
+        "specialty_id": { "type": "string", "format": "uuid", "description": "ID da especialidade" },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "email", "crm", "specialty_id"]
+    },
+    "specialties": {
+      "title": "Especialidades Médicas",
+      "description": "Lista de especialidades oferecidas pela clínica.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "name": { "type": "string", "description": "Nome da especialidade" }
+      },
+      "required": ["id", "name"]
+    },
+    "patients": {
+      "title": "Pacientes",
+      "description": "Cadastro de pacientes da clínica.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "birth_date": { "type": "string", "format": "date" },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "phone"]
+    },
+    "appointments": {
+      "title": "Consultas",
+      "description": "Registro de agendamentos de consultas.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "doctor_id": { "type": "string", "format": "uuid" },
+        "patient_id": { "type": "string", "format": "uuid" },
+        "date": { "type": "string", "format": "date" },
+        "start_time": { "type": "string", "description": "Horário de início (HH:mm)" },
+        "end_time": { "type": "string", "description": "Horário de término (HH:mm)" },
+        "status": { "type": "string", "enum": ["scheduled", "confirmed", "cancelled", "completed"] },
+        "notes": { "type": "string", "description": "Observações clínicas" },
+        "created_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "doctor_id", "patient_id", "date", "start_time", "status"]
+    }
+  },
+  "firestore": {
+    "/profiles/{id}": { "schema": "profiles", "description": "Perfis de usuários" },
+    "/doctors/{id}": { "schema": "doctors", "description": "Tabela de médicos" },
+    "/specialties/{id}": { "schema": "specialties", "description": "Especialidades médicas" },
+    "/patients/{id}": { "schema": "patients", "description": "Cadastro de pacientes" },
+    "/appointments/{id}": { "schema": "appointments", "description": "Agendamentos de consultas" }
+  }
+}
